@@ -262,11 +262,20 @@
 </ol>
 <p>
   Local playback runs through a <code>GainNode</code> rather than straight to the
-  destination. As soon as Anam's own audio track goes live, that gain drops to
-  <code>0</code> — the avatar's copy is the one aligned to its video, and playing both
-  is what makes the avatar look badly out of sync. If Anam's track never
-  arrives, the gain stays at <code>1</code>, so a failed avatar degrades to
-  plain voice rather than silence.
+  destination, and that gain <strong>starts at <code>0</code></strong>. The avatar
+  returns the agent's voice already aligned to its video, so it is the only intended
+  audio source; the browser's own copy is a fallback that is switched on only if the
+  avatar produces no audio track within 10&nbsp;s, or fails to start at all. A failed
+  avatar therefore degrades to plain voice rather than silence.
+</p>
+<div class="note warn">
+  <strong>Silence by default, not silenced afterwards.</strong>
+  An earlier version started the gain at <code>1</code> and dropped it once the avatar's
+  track appeared. That read as two overlapping voices, because the mute was applied
+  before the <code>AudioContext</code> existed — the avatar reports its track during
+  bring-up, which now happens <em>before</em> the ElevenLabs socket opens — so it landed
+  on a null node and was lost, leaving the gain at its default. Defaulting to
+  <code>0</code> removes the ordering dependency entirely.
 </p>
 
 <h3>User speech — the inbound half</h3>
@@ -333,7 +342,7 @@
   <text x="120" y="162" text-anchor="end" class="t-lane" fill="var(--ink)">Speakers</text>
   <text x="120" y="176" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">local queue</text>
   <rect x="146" y="150" width="552" height="24" rx="5" fill="url(#hatch)" stroke="var(--ink-soft)" stroke-dasharray="4 3"/>
-  <text x="422" y="166" text-anchor="middle" class="e-lbl" fill="var(--ink-soft)">gain → 0 once the avatar track is live (fallback path only)</text>
+  <text x="422" y="166" text-anchor="middle" class="e-lbl" fill="var(--ink-soft)">silent unless the avatar fails — fallback path only</text>
 
   <!-- lane 4: anam -->
   <text x="120" y="204" text-anchor="end" class="t-lane" fill="var(--ink)">Anam</text>
