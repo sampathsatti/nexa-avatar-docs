@@ -1,0 +1,473 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jordan Avatar — Anam Flow Reference</title>
+
+<style>
+  :root {
+    --bg:        #f7f8fa;
+    --surface:   #ffffff;
+    --surface-2: #eef1f6;
+    --line:      #d8dee9;
+    --ink:       #12151c;
+    --ink-soft:  #5a6479;
+    --accent:    #1d4ed8;
+    --accent-dim:#dbe6ff;
+    --good:      #15803d;
+    --warn:      #b45309;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#07070e; --surface:#0f1119; --surface-2:#161a25; --line:#242a38;
+      --ink:#e8ecf4; --ink-soft:#98a2b8; --accent:#7aa2ff; --accent-dim:#16223f;
+      --good:#4ade80; --warn:#fbbf24;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#07070e; --surface:#0f1119; --surface-2:#161a25; --line:#242a38;
+    --ink:#e8ecf4; --ink-soft:#98a2b8; --accent:#7aa2ff; --accent-dim:#16223f;
+    --good:#4ade80; --warn:#fbbf24;
+  }
+  :root[data-theme="light"] {
+    --bg:#f7f8fa; --surface:#ffffff; --surface-2:#eef1f6; --line:#d8dee9;
+    --ink:#12151c; --ink-soft:#5a6479; --accent:#1d4ed8; --accent-dim:#dbe6ff;
+    --good:#15803d; --warn:#b45309;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 40px; }
+  .eyebrow {
+    font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 14px;
+  }
+  h1 { font-size: 34px; line-height: 1.15; margin: 0 0 12px; letter-spacing: -.02em; text-wrap: balance; }
+  .lede { font-size: 17px; color: var(--ink-soft); margin: 0; max-width: 68ch; }
+
+  h2 {
+    font-size: 22px; margin: 52px 0 6px; letter-spacing: -.01em;
+    padding-top: 20px; border-top: 1px solid var(--line); text-wrap: balance;
+  }
+  h3 { font-size: 15.5px; margin: 32px 0 8px; letter-spacing: .01em; }
+  p  { margin: 12px 0; max-width: 72ch; }
+  ul, ol { max-width: 72ch; padding-left: 22px; }
+  li { margin: 6px 0; }
+
+  code {
+    font: 13px/1.4 var(--mono); background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px;
+    word-break: break-word;
+  }
+  pre {
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 16px; overflow-x: auto; font: 13px/1.6 var(--mono); margin: 16px 0;
+  }
+  pre code { background: none; border: 0; padding: 0; }
+
+  .fig {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px; margin: 22px 0; overflow-x: auto;
+  }
+  .fig svg { display: block; min-width: 640px; width: 100%; height: auto; }
+  figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 12px; }
+
+  .tablewrap { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .note {
+    border-left: 3px solid var(--accent); background: var(--accent-dim);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 18px 0;
+    font-size: 14.5px;
+  }
+  .note.warn { border-left-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .note strong { display: block; margin-bottom: 3px; }
+
+  .pill {
+    display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: .05em;
+    padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--surface-2); color: var(--ink-soft); white-space: nowrap;
+  }
+  .pill.ok   { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+  .pill.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+
+  .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin: 32px 0; }
+  .toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  .toc a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  .toc a:hover { border-bottom-color: var(--accent); }
+  @media (max-width: 620px) { .toc ol { columns: 1; } h1 { font-size: 27px; } .wrap { padding: 36px 18px 72px; } }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-soft); }
+
+  /* diagram type */
+  .n-title { font: 600 12.5px var(--sans); }
+  .n-sub   { font: 10.5px var(--mono); }
+  .e-lbl   { font: 10px var(--mono); }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <p class="eyebrow">NexaERP · Jordan sales agent</p>
+  <h1>The Anam avatar flow</h1>
+  <p class="lede">
+    How a talking, lip-synced avatar is driven by an ElevenLabs voice agent —
+    the services and audio paths behind it, and the interaction rules in front of it.
+  </p>
+</header>
+
+<div class="toc">
+  <ol>
+    <li><a href="#shape">The shape of the system</a></li>
+    <li><a href="#bootstrap">Session bootstrap</a></li>
+    <li><a href="#audio">The audio pipeline</a></li>
+    <li><a href="#turns">Turn boundaries</a></li>
+    <li><a href="#ordering">Startup ordering</a></li>
+    <li><a href="#ui">Front of house: UI states</a></li>
+    <li><a href="#modality">The modality contract</a></li>
+    <li><a href="#tools">Client tools</a></li>
+    <li><a href="#lessons">Failure modes worth remembering</a></li>
+    <li><a href="#reference">Constants and endpoints</a></li>
+  </ol>
+</div>
+
+<h2 id="shape">1. The shape of the system</h2>
+<p>
+  Three parties, and the key point is that <strong>two of them never talk to each other</strong>.
+  ElevenLabs runs the conversation — speech-to-text, the LLM, and text-to-speech.
+  Anam only renders video: it receives raw PCM and returns a face that mouths it.
+  The browser is the bridge, and every frame of agent speech passes through it twice —
+  once toward the speakers, once toward Anam.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Browser sits between ElevenLabs and Anam; agent audio is forked to both speakers and Anam.">
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6Z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- ElevenLabs -->
+  <rect x="14" y="96" width="176" height="104" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+  <text x="102" y="128" text-anchor="middle" class="n-title" fill="var(--ink)">ElevenLabs Agent</text>
+  <text x="102" y="148" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">STT · LLM · TTS</text>
+  <text x="102" y="166" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">raw WebSocket</text>
+  <text x="102" y="184" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">pcm_16000</text>
+
+  <!-- Browser -->
+  <rect x="290" y="60" width="180" height="176" rx="10" fill="var(--surface-2)" stroke="var(--accent)"/>
+  <text x="380" y="88" text-anchor="middle" class="n-title" fill="var(--ink)">Browser</text>
+  <text x="380" y="108" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">the bridge</text>
+  <line x1="308" y1="122" x2="452" y2="122" stroke="var(--line)"/>
+  <text x="380" y="144" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">decode base64 → PCM16</text>
+  <text x="380" y="164" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">fork</text>
+  <text x="380" y="186" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">AudioContext (gain-gated)</text>
+  <text x="380" y="206" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">AgentAudioInputStream</text>
+
+  <!-- Anam -->
+  <rect x="570" y="96" width="176" height="104" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+  <text x="658" y="128" text-anchor="middle" class="n-title" fill="var(--ink)">Anam (Cara-4)</text>
+  <text x="658" y="148" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">lip-sync render</text>
+  <text x="658" y="166" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">WebRTC · 3:2</text>
+  <text x="658" y="184" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">brains disabled</text>
+
+  <!-- mic up -->
+  <g color="var(--good)">
+    <path d="M290 100 L196 118" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <text x="234" y="96" text-anchor="middle" class="e-lbl" fill="var(--good)">user_audio_chunk</text>
+  </g>
+  <!-- agent audio down -->
+  <g color="var(--accent)">
+    <path d="M190 168 L286 186" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <text x="238" y="206" text-anchor="middle" class="e-lbl" fill="var(--accent)">audio · agent_response</text>
+  </g>
+  <!-- to anam -->
+  <g color="var(--accent)">
+    <path d="M470 130 L566 130" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <text x="518" y="122" text-anchor="middle" class="e-lbl" fill="var(--accent)">PCM16</text>
+  </g>
+  <!-- back from anam -->
+  <g color="var(--ink-soft)">
+    <path d="M566 172 L474 172" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <text x="520" y="192" text-anchor="middle" class="e-lbl" fill="var(--ink-soft)">video + audio</text>
+  </g>
+
+  <!-- speakers -->
+  <g color="var(--ink-soft)">
+    <path d="M380 60 L380 34" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+    <text x="392" y="30" class="e-lbl" fill="var(--ink-soft)">speakers — muted once the avatar carries the audio</text>
+  </g>
+
+  <text x="380" y="270" text-anchor="middle" class="n-sub" fill="var(--ink-soft)">ElevenLabs and Anam never connect directly</text>
+</svg>
+<figcaption>
+  The fork in the middle is the whole design. The same decoded PCM frame is queued
+  for playback and handed to Anam in the same tick, so the mouth is rendering the
+  exact audio the user hears.
+</figcaption>
+</div>
+
+<h2 id="bootstrap">2. Session bootstrap</h2>
+<p>
+  The browser never sees the Anam API key. It calls a Firebase Function, which mints a
+  short-lived session token and returns only that.
+</p>
+
+<pre><code>POST /api/anamStartSession          → Firebase Function (anamStartSession)
+  POST https://api.anam.ai/v1/auth/session-token
+    Authorization: Bearer &lt;ANAM_API_KEY&gt;        // server-side only
+    { clientLabel, personaConfig: {
+        name: "Jordan", avatarId, voiceId,
+        disableBrains: true,                     // ← we supply the words
+        enableAudioPassthrough: true,            // ← and the audio
+        maxSessionLengthSeconds: 600 } }
+  ← { sessionToken }                             // JWT, type: audio_passthrough
+← { sessionToken }</code></pre>
+
+<div class="note">
+  <strong>The two flags are the whole trick.</strong>
+  Passing a stored <code>personaId</code> instead returns a token of type
+  <code>stateful</code> — bound to that persona's own LLM and voice. The avatar then
+  holds its own conversation and has no reason to mouth your audio. Requesting an
+  <em>ephemeral</em> persona with these flags returns type
+  <code>audio_passthrough</code>, where the avatar renders exactly the PCM you push.
+  You can confirm which you got by decoding the JWT's <code>type</code> claim.
+</div>
+
+<h2 id="audio">3. The audio pipeline</h2>
+
+<h3>Agent speech — the outbound half</h3>
+<p>Each ElevenLabs <code>audio</code> event carries base64 PCM16 at 16&nbsp;kHz. On arrival:</p>
+<ol>
+  <li>Decode base64 → <code>Uint8Array</code>.</li>
+  <li><strong>Gate the mic</strong> — the agent is about to be audible (see §7).</li>
+  <li><strong>Schedule locally</strong>: convert to Float32, append to an
+      <code>AudioContext</code> queue at <code>nextStartTime</code> so frames abut
+      without gaps or overlap.</li>
+  <li><strong>Send to Anam</strong>: the same bytes go to
+      <code>AgentAudioInputStream.sendAudioChunk()</code>.</li>
+</ol>
+<p>
+  Local playback runs through a <code>GainNode</code> rather than straight to the
+  destination. As soon as Anam's own audio track goes live, that gain drops to
+  <code>0</code> — the avatar's copy is the one aligned to its video, and playing both
+  is what makes the avatar look badly out of sync. If Anam's track never
+  arrives, the gain stays at <code>1</code>, so a failed avatar degrades to
+  plain voice rather than silence.
+</p>
+
+<h3>User speech — the inbound half</h3>
+<p>
+  <code>getUserMedia</code> with echo cancellation and noise suppression feeds an
+  <code>AudioWorklet</code> that accumulates 1024 samples (~64&nbsp;ms), converts to
+  Int16, base64-encodes, and emits <code>user_audio_chunk</code>. A worklet is used
+  rather than <code>ScriptProcessorNode</code> to keep the capture quantum small.
+</p>
+
+<h2 id="turns">4. Turn boundaries</h2>
+<p>
+  Anam needs to know when an utterance ends, via <code>endSequence()</code>. Choosing
+  the wrong signal is subtly destructive.
+</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Signal</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Playback queue drains</td>
+      <td><span class="pill warn">wrong</span> The queue empties between words mid-sentence, so the utterance is cut off after a few frames and the mouth stops early.</td>
+    </tr>
+    <tr>
+      <td>No new audio for 700&nbsp;ms</td>
+      <td><span class="pill ok">used</span> Rides through inter-word gaps and fires once the turn is genuinely over.</td>
+    </tr>
+    <tr>
+      <td><code>interruption</code> event, or user types</td>
+      <td><span class="pill ok">used</span> A real boundary — end immediately, drop buffered frames, stop playback.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="ordering">5. Startup ordering</h2>
+<p>
+  ElevenLabs begins streaming its greeting the instant its socket opens. Anam needs
+  several seconds of WebRTC negotiation. Connect in the wrong order and the entire
+  greeting arrives before there is a channel to receive it — the avatar simply
+  never moves, and appears seconds after the voice.
+</p>
+<p>
+  Critically, <code>streamToVideoElement()</code> resolves on <em>negotiation</em>, not
+  on the first painted frame. Gating on it is still too early. The real signal is
+  <code>AnamEvent.VIDEO_PLAY_STARTED</code>, backed by a poll on
+  <code>videoWidth &gt; 0 &amp;&amp; !paused</code> and a 12&nbsp;s timeout so a broken
+  avatar can never strand the conversation.
+</p>
+<pre><code>await startSimli()          // mint token, attach, open agent-audio channel
+await anamVisible           // VIDEO_PLAY_STARTED  ── measured ~4.0 s
+await rawConv.start()       // only now connect ElevenLabs ── audio at ~5.1 s</code></pre>
+<p>
+  Frames that still arrive early are buffered (capped at 400) and flushed in order
+  once the channel opens, so nothing is lost in the race.
+</p>
+
+<h2 id="ui">6. Front of house: UI states</h2>
+<p>
+  The widget is a docked panel: an inset avatar video with the mic as a pill over it,
+  a tagline, two CTAs, the transcript, and a composer. One control surface carries the
+  live state — the mic pill's colour and label.
+</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>State</th><th>Mic pill</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>Connecting…</code></td><td>—</td><td>Minting the Anam session.</td></tr>
+    <tr><td><code>Waking Jordan…</code></td><td>—</td><td>Avatar negotiated; waiting on the first painted frame. ElevenLabs is deliberately not connected yet.</td></tr>
+    <tr><td><code>listening</code></td><td>blue · “Listening…”</td><td>Mic open, agent silent.</td></tr>
+    <tr><td><code>speaking</code></td><td>green · “Jordan is speaking…”</td><td>Agent audible; mic gated shut.</td></tr>
+    <tr><td><code>muted</code></td><td>grey · “Microphone muted”</td><td>User muted deliberately; typing still works.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="modality">7. The modality contract</h2>
+<p>Voice and typing are two doors into one conversation. The rules:</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Situation</th><th>Behaviour</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Avatar speech</td>
+      <td>Only ever ElevenLabs agent audio.</td>
+      <td>Nothing else is fed to the lip-sync channel, so the avatar cannot voice anything the agent did not say.</td>
+    </tr>
+    <tr>
+      <td>User types</td>
+      <td>One bubble on send; ElevenLabs' echo is suppressed.</td>
+      <td>The agent echoes typed input back as a <code>user_transcript</code>, re-cased and re-punctuated — so matching is on a normalised form within a 20&nbsp;s window, not the exact string.</td>
+    </tr>
+    <tr>
+      <td>User speaks</td>
+      <td>Transcript is logged as a chat message.</td>
+      <td>The written history stays complete no matter which modality was used.</td>
+    </tr>
+    <tr>
+      <td>User types while Jordan talks</td>
+      <td>Interrupts him.</td>
+      <td>Playback is cancelled, the buffer dropped and the sequence ended, so the answer to the new message does not overlap the old one.</td>
+    </tr>
+    <tr>
+      <td>Jordan is audible</td>
+      <td>Mic is gated shut, reopening ~900&nbsp;ms after speech stops.</td>
+      <td>His voice leaves the speakers; an open mic lets ElevenLabs transcribe him as the user and answer his own words back.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="note warn">
+  <strong>This makes voice half-duplex.</strong>
+  You cannot barge in over Jordan by speaking — though typing interrupts instantly.
+  It is the reliable cure for the self-hearing loop; the alternative is trusting the
+  browser's echo cancellation alone, which is worth revisiting if barge-in matters more
+  than the guarantee.
+</div>
+
+<h2 id="tools">8. Client tools</h2>
+<p>
+  The agent drives the page through four tools. Each <code>client_tool_call</code> is
+  executed in the browser and answered with a <code>client_tool_result</code>.
+</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Tool</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td><code>navigate_to_section</code></td><td>Scrolls to a section and pulses it. Closed enum — the agent cannot invent targets.</td></tr>
+    <tr><td><code>show_highlight_slide</code></td><td>Opens a pre-authored highlight card.</td></tr>
+    <tr><td><code>show_quick_reply</code></td><td>Renders tappable replies; a tap is treated exactly like typed input.</td></tr>
+    <tr><td><code>advance_demo_slide</code></td><td>Moves through the demo deck.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>
+  Slide and highlight copy is pre-authored in the page rather than generated, so the
+  agent cannot improvise product claims or statistics.
+</p>
+
+<h2 id="lessons">9. Failure modes worth remembering</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Symptom</th><th>Actual cause</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Mouth never moves</td>
+      <td>Session was <code>stateful</code>, not <code>audio_passthrough</code> — the avatar was running its own brain.</td>
+    </tr>
+    <tr>
+      <td>Mouth never moves, correct token</td>
+      <td>ElevenLabs connected first; the whole greeting landed before the agent-audio channel existed.</td>
+    </tr>
+    <tr>
+      <td>Mouth moves briefly then stops</td>
+      <td><code>endSequence()</code> fired when the playback queue drained between words.</td>
+    </tr>
+    <tr>
+      <td>Large apparent A/V lag</td>
+      <td>ElevenLabs audio was passed as <code>userProvidedAudioStream</code> — that argument is the <em>microphone</em> input, not the lip-sync channel. Local audio also played a full round-trip ahead of the returned video.</td>
+    </tr>
+    <tr>
+      <td>Agent repeats the user</td>
+      <td>Open mic during agent speech, plus exact-string echo matching that missed re-punctuated transcripts.</td>
+    </tr>
+    <tr>
+      <td>Avatar's head cropped</td>
+      <td>Container aspect did not match the 3:2 source, so <code>object-fit: cover</code> had something to crop.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="reference">10. Constants and endpoints</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Item</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Agent audio format</td><td><code>pcm_16000</code> — mono PCM16 @ 16 kHz, matched on both sides</td></tr>
+    <tr><td>Mic capture quantum</td><td>1024 samples (~64 ms)</td></tr>
+    <tr><td>End-of-turn debounce</td><td>700 ms of audio silence</td></tr>
+    <tr><td>Mic gate tail</td><td>900 ms after last agent frame</td></tr>
+    <tr><td>Pre-channel buffer cap</td><td>400 frames</td></tr>
+    <tr><td>Avatar-visible timeout</td><td>12 s, then proceed regardless</td></tr>
+    <tr><td>Max session</td><td>600 s</td></tr>
+    <tr><td>Anam token</td><td><code>POST https://api.anam.ai/v1/auth/session-token</code></td></tr>
+    <tr><td>ElevenLabs socket</td><td><code>wss://api.elevenlabs.io/v1/convai/conversation?agent_id=…</code></td></tr>
+    <tr><td>Server endpoint</td><td><code>POST /api/anamStartSession</code></td></tr>
+    <tr><td>Secrets</td><td><code>ANAM_API_KEY</code> — server-side only; never sent to the browser</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>ElevenLabs messages handled</h3>
+<p>
+  <code>conversation_initiation_metadata</code>, <code>audio</code>,
+  <code>agent_response</code>, <code>agent_response_correction</code>,
+  <code>user_transcript</code>, <code>interruption</code>,
+  <code>client_tool_call</code>, and <code>ping</code> (answered with
+  <code>pong</code> to hold the socket open).
+</p>
+
+<footer>
+  Source: <code>website/avatar-anam.js</code>,
+  <code>website/avatar-widget.css</code>,
+  <code>functions/src/ingestion/anamStartSession.ts</code>.
+  Timings quoted are measured from an automated browser run, not estimates.
+</footer>
+</div>
