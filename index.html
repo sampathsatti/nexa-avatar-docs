@@ -110,6 +110,9 @@
   footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-soft); }
 
   /* diagram type */
+  .fig-wide svg { min-width: 800px; }
+  .t-lane  { font: 600 11px var(--sans); }
+  .t-axis  { font: 10px var(--mono); }
   .n-title { font: 600 12.5px var(--sans); }
   .n-sub   { font: 10.5px var(--mono); }
   .e-lbl   { font: 10px var(--mono); }
@@ -273,6 +276,113 @@
   Int16, base64-encodes, and emits <code>user_audio_chunk</code>. A worklet is used
   rather than <code>ScriptProcessorNode</code> to keep the capture quantum small.
 </p>
+
+
+<div class="fig fig-wide">
+<svg viewBox="0 0 900 350" role="img" aria-label="Timeline of one agent utterance across ElevenLabs, browser, speakers, Anam and microphone lanes.">
+  <defs>
+    <marker id="tarr" markerWidth="8" markerHeight="8" refX="7" refY="2.6" orient="auto">
+      <path d="M0,0 L7,2.6 L0,5.2Z" fill="currentColor"/>
+    </marker>
+    <pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--ink-soft)" stroke-width="2" opacity=".35"/>
+    </pattern>
+  </defs>
+
+  <!-- time axis -->
+  <g class="t-axis" fill="var(--ink-soft)">
+    <text x="130" y="26" text-anchor="middle">0s</text>
+    <text x="313" y="26" text-anchor="middle">1s</text>
+    <text x="495" y="26" text-anchor="middle">2s</text>
+    <text x="678" y="26" text-anchor="middle">3s</text>
+    <text x="860" y="26" text-anchor="middle">4s</text>
+  </g>
+  <g stroke="var(--line)" stroke-dasharray="3 4">
+    <line x1="130" y1="34" x2="130" y2="300"/>
+    <line x1="313" y1="34" x2="313" y2="300"/>
+    <line x1="495" y1="34" x2="495" y2="300"/>
+    <line x1="678" y1="34" x2="678" y2="300"/>
+    <line x1="860" y1="34" x2="860" y2="300"/>
+  </g>
+
+  <!-- lane 1: ElevenLabs frames -->
+  <text x="120" y="70" text-anchor="end" class="t-lane" fill="var(--ink)">ElevenLabs</text>
+  <text x="120" y="84" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">audio events</text>
+  <g fill="var(--accent)">
+    <rect x="146" y="56" width="7" height="20" rx="2"/>
+    <rect x="228" y="56" width="7" height="20" rx="2"/>
+    <rect x="311" y="56" width="7" height="20" rx="2"/>
+    <rect x="393" y="56" width="7" height="20" rx="2"/>
+    <rect x="475" y="56" width="7" height="20" rx="2"/>
+    <rect x="557" y="56" width="7" height="20" rx="2"/>
+    <rect x="639" y="56" width="7" height="20" rx="2"/>
+  </g>
+  <text x="660" y="52" class="e-lbl" fill="var(--ink-soft)">last frame</text>
+
+  <!-- lane 2: browser decode + fork -->
+  <text x="120" y="118" text-anchor="end" class="t-lane" fill="var(--ink)">Browser</text>
+  <text x="120" y="132" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">decode &amp; fork</text>
+  <rect x="146" y="104" width="500" height="24" rx="5" fill="var(--surface-2)" stroke="var(--accent)"/>
+  <text x="396" y="120" text-anchor="middle" class="e-lbl" fill="var(--ink)">base64 → PCM16 · gate mic · queue locally · sendAudioChunk()</text>
+  <g color="var(--ink-soft)">
+    <path d="M300 130 L300 148" stroke="currentColor" stroke-width="1.4" marker-end="url(#tarr)" fill="none"/>
+    <path d="M470 130 L470 190" stroke="currentColor" stroke-width="1.4" marker-end="url(#tarr)" fill="none"/>
+  </g>
+
+  <!-- lane 3: local playback, muted -->
+  <text x="120" y="162" text-anchor="end" class="t-lane" fill="var(--ink)">Speakers</text>
+  <text x="120" y="176" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">local queue</text>
+  <rect x="146" y="150" width="552" height="24" rx="5" fill="url(#hatch)" stroke="var(--ink-soft)" stroke-dasharray="4 3"/>
+  <text x="422" y="166" text-anchor="middle" class="e-lbl" fill="var(--ink-soft)">gain → 0 once the avatar track is live (fallback path only)</text>
+
+  <!-- lane 4: anam -->
+  <text x="120" y="204" text-anchor="end" class="t-lane" fill="var(--ink)">Anam</text>
+  <text x="120" y="218" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">what is heard</text>
+  <rect x="194" y="192" width="549" height="24" rx="5" fill="var(--accent-dim)" stroke="var(--accent)"/>
+  <text x="468" y="208" text-anchor="middle" class="e-lbl" fill="var(--ink)">lip-synced video + audio — one aligned stream</text>
+  <g color="var(--accent)">
+    <path d="M150 186 L190 186" stroke="currentColor" stroke-width="1.3" marker-end="url(#tarr)" fill="none"/>
+  </g>
+  <text x="196" y="182" class="e-lbl" fill="var(--ink-soft)">render latency</text>
+
+  <!-- lane 5: microphone -->
+  <text x="120" y="246" text-anchor="end" class="t-lane" fill="var(--ink)">Microphone</text>
+  <text x="120" y="260" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">user_audio_chunk</text>
+  <rect x="130" y="234" width="16" height="24" rx="4" fill="var(--surface-2)" stroke="var(--good)"/>
+  <rect x="146" y="234" width="659" height="24" rx="5"
+        fill="color-mix(in srgb, var(--warn) 16%, transparent)" stroke="var(--warn)"/>
+  <text x="475" y="250" text-anchor="middle" class="e-lbl" fill="var(--warn)">GATED — re-armed by every frame, so inter-word gaps never reopen it</text>
+  <rect x="805" y="234" width="55" height="24" rx="4" fill="var(--surface-2)" stroke="var(--good)"/>
+  <text x="832" y="250" text-anchor="middle" class="e-lbl" fill="var(--good)">open</text>
+
+  <!-- markers -->
+  <g stroke="var(--ink-soft)" stroke-dasharray="2 3">
+    <line x1="646" y1="46" x2="646" y2="300"/>
+  </g>
+  <g stroke="var(--accent)"><line x1="769" y1="222" x2="769" y2="300" stroke-dasharray="2 3"/></g>
+  <g stroke="var(--good)"><line x1="805" y1="258" x2="805" y2="300" stroke-dasharray="2 3"/></g>
+
+  <!-- spans measured from the LAST frame -->
+  <g stroke="var(--accent)" fill="none">
+    <path d="M646 286 L769 286"/><path d="M646 282 L646 290"/><path d="M769 282 L769 290"/>
+  </g>
+  <text x="707" y="278" text-anchor="middle" class="e-lbl" fill="var(--accent)">700 ms</text>
+  <text x="775" y="312" class="e-lbl" fill="var(--accent)">endSequence()</text>
+
+  <g stroke="var(--good)" fill="none">
+    <path d="M646 330 L805 330"/><path d="M646 326 L646 334"/><path d="M805 326 L805 334"/>
+  </g>
+  <text x="725" y="326" text-anchor="middle" class="e-lbl" fill="var(--good)">900 ms</text>
+  <text x="860" y="344" text-anchor="end" class="e-lbl" fill="var(--ink-soft)">timers run from the last frame, not the end of playback</text>
+</svg>
+<figcaption>
+  One utterance, end to end. The browser band is the fork: every frame is queued
+  for local playback <em>and</em> handed to Anam in the same tick. Anam's lane starts
+  slightly later — that offset is the render round-trip, and it is exactly why the
+  local copy is silenced rather than played alongside it. Both timers are re-armed by
+  each arriving frame, so neither fires during the gaps between words.
+</figcaption>
+</div>
 
 <h2 id="turns">4. Turn boundaries</h2>
 <p>
