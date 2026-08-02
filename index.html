@@ -139,6 +139,7 @@
     <li><a href="#modality">The modality contract</a></li>
     <li><a href="#tools">Client tools</a></li>
     <li><a href="#lessons">Failure modes worth remembering</a></li>
+    <li><a href="#bridge">Why the browser is the bridge</a></li>
     <li><a href="#reference">Constants and endpoints</a></li>
   </ol>
 </div>
@@ -555,12 +556,54 @@ await rawConv.start()       // only now connect ElevenLabs ── audio at ~5.1 
 </table>
 </div>
 
-<h2 id="reference">10. Constants and endpoints</h2>
+<h2 id="bridge">10. Why the browser is the bridge</h2>
+<p>
+  Agent audio makes a visible detour: ElevenLabs → browser → Anam, when it could
+  in principle go server to server. That is deliberate, and the reason is specific
+  rather than general.
+</p>
+<p>
+  Anam's <code>AgentAudioInputStream</code> is constructed from the signalling
+  connection of the session that opened the peer connection. A server cannot push
+  audio into a session the browser owns. Moving the bridge server-side therefore
+  means the <em>server</em> owns the Anam session — at which point the video arrives
+  there too, and reaching the browser needs an SFU to re-broadcast it. That is new
+  infrastructure, not a relocated hop.
+</p>
+<p>
+  It also costs latency where it is felt most. Today the microphone path is
+  <code>browser → ElevenLabs</code>, one leg. A server bridge makes it
+  <code>browser → server → ElevenLabs</code> in both directions, adding two legs to
+  the turn-taking loop — the delay users read as sluggishness.
+</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>A server bridge would…</th><th>Assessment</th></tr></thead>
+  <tbody>
+    <tr><td>Centralise logging and moderation of the audio stream</td><td><span class="pill ok">real gain</span></td></tr>
+    <tr><td>Behave uniformly regardless of client network or CPU</td><td><span class="pill ok">real gain</span></td></tr>
+    <tr><td>Keep API keys off the client</td><td><span class="pill">already true</span> tokens are minted server-side; the key never reaches the browser</td></tr>
+    <tr><td>Remove the browser from the audio path</td><td><span class="pill warn">it cannot</span> the microphone still originates there</td></tr>
+    <tr><td>Require an SFU and a persistent socket service</td><td><span class="pill warn">new cost</span></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note">
+  <strong>The server-side model exists as a product.</strong>
+  HeyGen's LiveAvatar in LITE mode hosts the ElevenLabs agent connection itself and
+  hands the browser a single merged stream — no local bridge, no fork, no sample-rate
+  bookkeeping. If that architecture is wanted, the move is to adopt it rather than
+  build it. The tradeoff is control: it also dictates its own constraints, including
+  requiring the agent to emit <code>pcm_24000</code>.
+</div>
+
+<h2 id="reference">11. Constants and endpoints</h2>
 <div class="tablewrap">
 <table>
   <thead><tr><th>Item</th><th>Value</th></tr></thead>
   <tbody>
-    <tr><td>Agent audio format</td><td><code>pcm_16000</code> — mono PCM16 @ 16 kHz, matched on both sides</td></tr>
+    <tr><td>Agent output format</td><td><code>pcm_24000</code> — mono PCM16 @ 24 kHz, mirrored in the playback graph and the Anam stream config</td></tr>
+    <tr><td>User input format</td><td><code>pcm_16000</code> — configured separately on the agent, so the mic path is unaffected by the output rate</td></tr>
     <tr><td>Mic capture quantum</td><td>1024 samples (~64 ms)</td></tr>
     <tr><td>End-of-turn debounce</td><td>700 ms of audio silence</td></tr>
     <tr><td>Mic gate tail</td><td>900 ms after last agent frame</td></tr>
